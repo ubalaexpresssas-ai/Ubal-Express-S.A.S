@@ -1,0 +1,2982 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1F4D36">
+<meta name="description" content="Ubalá Express SAS - Transporte de carga agrícola de la región del Guavio">
+<title>Ubalá Express SAS</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bosque:#1F4D36;
+--musgo:#3D6B4A;
+--oro:#D4941F;
+--papel:#F2F0E2;
+--tinta:#1A2420;
+--niebla:#7FA8A3;
+--arcilla:#B5542A;
+--blanco:#fff;
+--gris:#68736d;
+--verdeClaro:#e6efe8;
+}
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:#dfe5df;
+color:var(--tinta);
+min-height:100vh;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{
+width:100%;
+max-width:520px;
+min-height:100vh;
+margin:auto;
+background:var(--papel);
+position:relative;
+box-shadow:0 0 30px rgba(0,0,0,.15);
+overflow:hidden;
+}
+.screen{min-height:100vh}
+.hidden{display:none!important}
+
+/* LOGIN */
+.auth{
+min-height:100vh;
+background:linear-gradient(155deg,var(--bosque),#173526);
+color:white;
+padding:30px 22px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+.logo{
+width:82px;height:82px;
+border-radius:24px;
+background:var(--oro);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:43px;
+margin:0 auto 18px;
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+}
+.auth h1{
+text-align:center;
+font-size:34px;
+margin-bottom:7px;
+}
+.auth .tag{
+text-align:center;
+color:#dce9df;
+line-height:1.5;
+margin-bottom:28px;
+}
+.auth-card{
+background:white;
+color:var(--tinta);
+border-radius:24px;
+padding:24px;
+box-shadow:0 18px 40px rgba(0,0,0,.2);
+}
+.auth-card h2{margin-bottom:18px}
+.field{margin-bottom:14px}
+.field label{
+display:block;
+font-size:13px;
+font-weight:bold;
+margin-bottom:6px;
+color:#4b5851;
+}
+.field input,.field select,.field textarea{
+width:100%;
+border:1px solid #d4dad4;
+border-radius:12px;
+padding:13px;
+background:#fafcf9;
+outline:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+border-color:var(--musgo);
+box-shadow:0 0 0 3px rgba(61,107,74,.12);
+}
+.primary{
+width:100%;
+border:0;
+border-radius:13px;
+padding:14px;
+background:var(--bosque);
+color:white;
+font-weight:bold;
+font-size:16px;
+}
+.primary:hover{background:var(--musgo)}
+.primary:disabled{opacity:.5;cursor:not-allowed}
+.secondary{
+border:1px solid #cfd7d0;
+background:white;
+color:var(--bosque);
+border-radius:12px;
+padding:11px 14px;
+font-weight:bold;
+}
+.auth-switch{
+text-align:center;
+margin-top:18px;
+font-size:14px;
+}
+.auth-switch button{
+border:0;background:none;color:var(--bosque);font-weight:bold;
+}
+.error{
+background:#fee9e5;
+color:#9d3823;
+padding:10px;
+border-radius:10px;
+font-size:13px;
+margin-bottom:14px;
+}
+
+/* HEADER */
+.header{
+background:var(--bosque);
+color:white;
+padding:18px 18px 20px;
+}
+.header-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.brand{
+font-weight:bold;
+font-size:18px;
+display:flex;
+gap:9px;
+align-items:center;
+}
+.brand-mark{color:var(--oro);font-size:22px}
+.icon-btn{
+border:0;
+background:rgba(255,255,255,.12);
+color:white;
+width:40px;height:40px;
+border-radius:12px;
+font-size:20px;
+}
+.header h1{font-size:26px;margin-top:20px}
+.header p{font-size:14px;color:#d8e5db;margin-top:5px}
+
+/* CONTENT */
+.content{padding:18px;padding-bottom:95px}
+.section-title{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:12px;
+}
+.section-title h2{font-size:19px}
+.link{
+border:0;background:none;color:var(--bosque);font-weight:bold;font-size:13px;
+}
+
+/* SEARCH */
+.search{
+display:flex;
+align-items:center;
+gap:8px;
+background:white;
+border:1px solid #d7ddd7;
+padding:11px 13px;
+border-radius:13px;
+margin-bottom:13px;
+}
+.search span{color:#748078}
+.search input{
+border:0;outline:0;background:none;width:100%;
+}
+
+/* CATEGORIES */
+.categories{
+display:flex;
+gap:8px;
+overflow-x:auto;
+padding-bottom:4px;
+margin-bottom:18px;
+}
+.categories::-webkit-scrollbar{display:none}
+.category{
+white-space:nowrap;
+border:1px solid #d0d8d0;
+background:white;
+color:#4b5750;
+padding:8px 12px;
+border-radius:20px;
+font-size:13px;
+}
+.category.active{
+background:var(--bosque);
+border-color:var(--bosque);
+color:white;
+}
+
+/* PRODUCTS */
+.products{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+}
+.product{
+background:white;
+border-radius:17px;
+padding:13px;
+border:1px solid #e0e3de;
+box-shadow:0 4px 12px rgba(25,50,35,.05);
+}
+.product-emoji{
+height:82px;
+background:var(--verdeClaro);
+border-radius:13px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:43px;
+margin-bottom:10px;
+}
+.product h3{
+font-size:15px;
+line-height:1.25;
+margin-bottom:5px;
+}
+.product .producer{
+font-size:11px;
+color:var(--gris);
+margin-bottom:7px;
+}
+.product .price{
+font-size:16px;
+font-weight:bold;
+color:var(--bosque);
+}
+.product .unit{
+font-size:11px;color:var(--gris);
+}
+.add{
+width:100%;
+margin-top:9px;
+border:0;
+background:var(--oro);
+color:white;
+padding:9px;
+border-radius:10px;
+font-weight:bold;
+}
+
+/* CART */
+.cart-item{
+background:white;
+border-radius:15px;
+padding:14px;
+display:flex;
+gap:12px;
+margin-bottom:10px;
+align-items:center;
+}
+.cart-icon{
+width:54px;height:54px;
+border-radius:12px;
+background:var(--verdeClaro);
+display:flex;align-items:center;justify-content:center;
+font-size:27px;flex:none;
+}
+.cart-info{flex:1}
+.cart-info h3{font-size:14px}
+.cart-info p{font-size:12px;color:var(--gris);margin-top:3px}
+.qty{
+display:flex;
+align-items:center;
+gap:7px;
+margin-top:7px;
+}
+.qty button{
+border:0;
+width:27px;height:27px;
+border-radius:8px;
+background:#e6ece7;
+color:var(--bosque);
+font-weight:bold;
+}
+.qty strong{min-width:20px;text-align:center}
+.cart-price{font-weight:bold;color:var(--bosque);font-size:13px}
+.summary{
+background:white;
+border-radius:17px;
+padding:17px;
+margin-top:16px;
+}
+.row{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+font-size:14px;
+}
+.row.total{
+border-top:1px solid #ddd;
+padding-top:12px;
+font-size:18px;
+font-weight:bold;
+color:var(--bosque);
+}
+.empty{
+text-align:center;
+padding:45px 20px;
+color:var(--gris);
+}
+.empty-icon{font-size:50px;margin-bottom:12px}
+
+/* REQUEST */
+.card{
+background:white;
+border-radius:17px;
+padding:17px;
+margin-bottom:14px;
+}
+.card h3{margin-bottom:14px}
+.route{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:14px;
+}
+.route-line{
+width:3px;
+height:48px;
+background:var(--oro);
+margin-left:6px;
+}
+.truck-option{
+border:1px solid #d6ddd6;
+border-radius:13px;
+padding:12px;
+margin-bottom:9px;
+display:flex;
+gap:10px;
+align-items:center;
+}
+.truck-option.selected{
+border:2px solid var(--bosque);
+background:#edf4ee;
+}
+.truck-emoji{font-size:31px}
+.truck-info{flex:1}
+.truck-info strong{display:block;font-size:14px}
+.truck-info small{color:var(--gris)}
+.check{
+width:20px;height:20px;border-radius:50%;
+border:2px solid #b9c3ba;
+}
+.selected .check{
+background:var(--bosque);
+border-color:var(--bosque);
+position:relative;
+}
+.selected .check:after{
+content:"✓";
+color:white;
+font-size:12px;
+position:absolute;
+left:3px;top:0px;
+}
+.switch{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 0;
+}
+.switch button{
+width:48px;height:27px;border:0;border-radius:20px;background:#cbd3cc;
+position:relative;
+}
+.switch button:after{
+content:"";
+width:21px;height:21px;border-radius:50%;
+background:white;
+position:absolute;
+top:3px;left:4px;
+transition:.2s;
+}
+.switch button.on{background:var(--bosque)}
+.switch button.on:after{left:23px}
+
+/* ORDERS */
+.order{
+background:white;
+border-radius:16px;
+padding:15px;
+margin-bottom:11px;
+border:1px solid #e0e4df;
+}
+.order-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.order-id{
+font-family:monospace;
+font-size:12px;
+font-weight:bold;
+}
+.status{
+font-size:11px;
+font-weight:bold;
+padding:6px 8px;
+border-radius:20px;
+background:#e8f1e9;
+color:var(--bosque);
+white-space:nowrap;
+}
+.order-route{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin:14px 0;
+font-weight:bold;
+}
+.order-arrow{color:var(--oro)}
+.order-bottom{
+display:flex;
+justify-content:space-between;
+font-size:13px;
+color:var(--gris);
+}
+
+/* TRACKING */
+.tracking-map{
+height:235px;
+border-radius:18px;
+background:
+linear-gradient(135deg,#cddbcf 25%,transparent 25%) 0 0/45px 45px,
+linear-gradient(45deg,#d9e3d8 25%,transparent 25%) 0 0/55px 55px,
+#b9cbb9;
+position:relative;
+overflow:hidden;
+}
+.road{
+position:absolute;
+width:115%;
+height:16px;
+background:#e7dfcf;
+border:3px solid #9a9a88;
+transform:rotate(-20deg);
+left:-15px;top:100px;
+border-radius:20px;
+}
+.map-pin{
+position:absolute;
+font-size:27px;
+transform:translate(-50%,-50%);
+}
+.pin1{left:15%;top:73%}
+.pin2{right:14%;top:28%}
+.truck-pin{
+position:absolute;
+left:45%;top:50%;
+font-size:31px;
+filter:drop-shadow(0 3px 2px rgba(0,0,0,.25));
+}
+.progress-wrap{margin:16px 0}
+.progress{
+height:9px;background:#d9dfda;border-radius:20px;overflow:hidden;
+}
+.progress-bar{
+height:100%;background:var(--oro);border-radius:20px;
+}
+.timeline{margin-top:17px}
+.timeline-item{
+display:flex;
+gap:12px;
+margin-bottom:16px;
+}
+.timeline-dot{
+width:14px;height:14px;border-radius:50%;
+background:#c7d0c8;margin-top:2px;flex:none;
+}
+.timeline-item.done .timeline-dot{background:var(--bosque)}
+.timeline-item strong{font-size:14px}
+.timeline-item p{font-size:12px;color:var(--gris);margin-top:3px}
+
+/* PROFILE */
+.profile-head{
+text-align:center;
+padding:12px 0 20px;
+}
+.avatar{
+width:76px;height:76px;border-radius:50%;
+background:var(--bosque);
+color:white;
+display:flex;align-items:center;justify-content:center;
+font-size:30px;font-weight:bold;
+margin:auto auto 10px;
+}
+.profile-head h2{font-size:20px}
+.profile-head p{color:var(--gris);font-size:13px;margin-top:4px}
+.profile-stat{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+.stat{
+background:#edf2ed;
+border-radius:14px;
+padding:14px;
+text-align:center;
+}
+.stat strong{display:block;font-size:22px;color:var(--bosque)}
+.stat span{font-size:12px;color:var(--gris)}
+.logout{
+width:100%;
+margin-top:15px;
+padding:13px;
+border:0;
+border-radius:12px;
+background:#f8e6e1;
+color:var(--arcilla);
+font-weight:bold;
+}
+
+/* NAV */
+.bottom{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:100%;
+max-width:520px;
+height:75px;
+background:rgba(255,255,255,.97);
+border-top:1px solid #dce2dc;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+z-index:20;
+}
+.bottom.admin-nav{grid-template-columns:repeat(5,1fr)}
+.nav{
+border:0;background:none;color:#78827c;
+font-size:11px;
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+gap:4px;
+position:relative;
+}
+.nav.active{color:var(--bosque);font-weight:bold}
+.nav-icon{font-size:22px}
+.badge{
+position:absolute;
+top:9px;
+margin-left:23px;
+background:var(--arcilla);
+color:white;
+min-width:18px;height:18px;
+border-radius:20px;
+font-size:10px;
+display:flex;align-items:center;justify-content:center;
+}
+
+/* TOAST */
+.toast{
+position:fixed;
+bottom:88px;
+left:50%;
+transform:translateX(-50%);
+max-width:90%;
+background:#17231d;
+color:white;
+padding:12px 17px;
+border-radius:12px;
+z-index:50;
+font-size:13px;
+box-shadow:0 7px 25px rgba(0,0,0,.25);
+}
+
+/* BACK */
+.back{
+border:0;background:none;color:var(--bosque);font-weight:bold;
+margin-bottom:14px;
+}
+
+/* ================= ADMIN (nuevo, fusionado desde Trocha Guavio) ================= */
+.admin-note{
+text-align:center;
+font-size:11.5px;
+color:var(--gris);
+margin-top:16px;
+line-height:1.5;
+}
+.admin-tabs{
+display:flex;
+background:#e6ece7;
+border-radius:12px;
+padding:4px;
+margin-bottom:16px;
+}
+.admin-tabs button{
+flex:1;border:0;background:none;padding:9px 0;
+font-size:12.5px;font-weight:bold;color:#4b5851;border-radius:9px;
+}
+.admin-tabs button.active{background:var(--bosque);color:white}
+.stat-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-bottom:16px;
+}
+.stat-card{
+background:white;
+border:1px solid #e0e3de;
+border-radius:14px;
+padding:13px;
+display:flex;flex-direction:column;gap:4px;
+}
+.stat-card strong{font-size:21px;color:var(--bosque)}
+.stat-card span{font-size:11px;color:var(--gris)}
+.rank-list{
+background:white;
+border:1px solid #e0e3de;
+border-radius:12px;
+padding:4px 12px;
+margin-bottom:14px;
+}
+.rank-row{
+display:flex;justify-content:space-between;
+font-size:12.5px;padding:8px 0;
+border-bottom:1px dashed #e0e3de;
+}
+.rank-row:last-child{border-bottom:0}
+.rank-row strong{color:var(--bosque)}
+.admin-table-wrap{
+overflow-x:auto;
+background:white;
+border:1px solid #e0e3de;
+border-radius:14px;
+margin-bottom:14px;
+}
+.admin-table{
+border-collapse:collapse;
+width:100%;
+font-size:11.5px;
+white-space:nowrap;
+}
+.admin-table th{
+text-align:left;background:#f2f4f1;color:var(--gris);
+font-weight:bold;font-size:10px;text-transform:uppercase;
+letter-spacing:.02em;padding:9px 10px;
+}
+.admin-table td{
+padding:9px 10px;border-top:1px solid #eceee9;color:#2c332e;
+}
+.role-badge{
+font-size:10px;font-weight:bold;padding:4px 8px;border-radius:20px;
+}
+.role-administrador{background:#f6e4c1;color:#8a5d0f}
+.role-cliente{background:#dce6f0;color:#3a5c82}
+.badge-open{
+background:#dceae0;color:var(--bosque);
+font-size:10px;font-weight:bold;padding:4px 8px;border-radius:20px;
+}
+.icon-btn-sm{
+background:#e6ece7;border:0;color:var(--bosque);
+width:27px;height:27px;border-radius:8px;
+}
+.icon-danger{
+background:#f7e7df;border:0;color:var(--arcilla);
+width:27px;height:27px;border-radius:8px;margin-left:5px;
+}
+.td-input{
+width:82px;border:1px solid #d4dad4;border-radius:7px;
+padding:5px 7px;font-size:11.5px;
+}
+.select-sm{
+border:1px solid #d4dad4;border-radius:7px;
+padding:5px 6px;font-size:11px;background:white;
+}
+.add-row{
+display:flex;gap:6px;padding:10px;flex-wrap:wrap;
+}
+.add-row input,.add-row select{
+flex:1;min-width:88px;border:1px solid #d4dad4;
+border-radius:8px;padding:8px;font-size:11.5px;
+}
+.add-btn-wide{
+flex-basis:100%;padding:9px;font-size:12.5px;
+}
+.profile-info{
+background:white;
+border:1px solid #e0e3de;
+border-radius:14px;
+padding:4px 16px;
+margin-bottom:20px;
+}
+.profile-info div{
+display:flex;justify-content:space-between;
+padding:11px 0;font-size:12.5px;
+border-bottom:1px solid #eceee9;
+}
+.profile-info div:last-child{border-bottom:0}
+.data-note{
+background:#fff7e8;
+border:1px solid #f0dfb8;
+color:#8a5d0f;
+border-radius:12px;
+padding:12px 14px;
+font-size:12px;
+line-height:1.5;
+margin-bottom:14px;
+}
+
+/* RESPONSIVE */
+@media(min-width:700px){
+body{padding:25px}
+.app{border-radius:25px;min-height:calc(100vh - 50px)}
+.bottom{bottom:25px;border-radius:0 0 25px 25px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ================= LOGIN ================= -->
+<div id="loginScreen" class="screen auth">
+
+<div class="logo">🚚</div>
+
+<h1>Ubalá Express SAS</h1>
+
+<p class="tag">
+Transporte de carga agrícola<br>
+de la vereda a tu destino.
+</p>
+
+<div class="auth-card">
+
+<h2 id="authTitle">Iniciar sesión</h2>
+
+<div id="authError" class="error hidden"></div>
+
+<div id="registerFields" class="hidden">
+
+<div class="field">
+<label>Nombre completo</label>
+<input id="regName" type="text" placeholder="Ej. Juan Pérez">
+</div>
+
+<div class="field">
+<label>Teléfono</label>
+<input id="regPhone" type="tel" placeholder="Ej. 310 555 1234">
+</div>
+
+</div>
+
+<div class="field">
+<label>Correo electrónico</label>
+<input id="email" type="email" placeholder="correo@ejemplo.com">
+</div>
+
+<div class="field">
+<label>Contraseña</label>
+<input id="password" type="password" placeholder="Mínimo 4 caracteres">
+</div>
+
+<button class="primary" onclick="submitAuth()" id="authButton">
+Entrar a Ubalá Express
+</button>
+
+<div class="auth-switch">
+<span id="switchText">¿No tienes una cuenta?</span>
+<button onclick="toggleAuth()" id="switchButton">Crear cuenta</button>
+</div>
+
+<div class="admin-note">
+Cuenta de administrador de prueba: <strong>admin@trochaguavio.co</strong> / <strong>admin2026</strong>
+</div>
+
+</div>
+</div>
+
+
+<!-- ================= APP ================= -->
+<div id="mainScreen" class="screen hidden">
+
+<header class="header">
+
+<div class="header-top">
+
+<div class="brand">
+<span class="brand-mark">⛰</span>
+<span>Ubalá Express SAS</span>
+</div>
+
+<button class="icon-btn" onclick="showView('profile')">👤</button>
+
+</div>
+
+<h1 id="pageTitle">Mercado del Guavio</h1>
+
+<p id="pageSubtitle">Productos agrícolas de nuestra región</p>
+
+</header>
+
+<main class="content">
+
+<!-- HOME -->
+<section id="homeView">
+
+<div class="search">
+<span>🔎</span>
+<input id="searchInput" oninput="renderProducts()" placeholder="Buscar producto...">
+</div>
+
+<div class="categories" id="categories"></div>
+
+<div class="section-title">
+<h2>Productos de la región</h2>
+<span style="font-size:12px;color:#68736d" id="productCount"></span>
+</div>
+
+<div class="products" id="products"></div>
+
+</section>
+
+
+<!-- CART -->
+<section id="cartView" class="hidden">
+
+<div class="section-title">
+<h2>Tu carga</h2>
+</div>
+
+<div id="cartItems"></div>
+
+<div id="cartSummary"></div>
+
+</section>
+
+
+<!-- REQUEST -->
+<section id="requestView" class="hidden">
+
+<button class="back" onclick="showView(cart.length?'cart':'home')">← Volver</button>
+
+<div class="card">
+
+<h3>📍 Ruta de transporte</h3>
+
+<div class="field">
+<label>Origen</label>
+<select id="origin">
+<option>Ubalá</option>
+<option>Gachalá</option>
+<option>Gachetá</option>
+<option>Gama</option>
+<option>Guasca</option>
+<option>Guatavita</option>
+<option>Junín</option>
+<option>La Calera</option>
+<option>Fómeque</option>
+<option>Medina</option>
+</select>
+</div>
+
+<div class="field">
+<label>Destino</label>
+<select id="destination">
+<option>Bogotá D.C.</option>
+<option>Ubalá</option>
+<option>Gachalá</option>
+<option>Gachetá</option>
+<option>Gama</option>
+<option>Guasca</option>
+<option>Guatavita</option>
+<option>Junín</option>
+<option>La Calera</option>
+<option>Fómeque</option>
+<option>Medina</option>
+</select>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>🚚 Tipo de camión</h3>
+
+<div id="truckOptions"></div>
+
+<div class="switch">
+<div>
+<strong>Servicio exclusivo</strong>
+<br>
+<small style="color:#68736d">Viaje directo y prioritario</small>
+</div>
+<button id="exclusiveSwitch" onclick="toggleExclusive()"></button>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📝 Información adicional</h3>
+
+<div class="field">
+<label>Notas de la carga</label>
+<textarea id="notes" rows="3" placeholder="Ej. Carga delicada, recoger en finca, etc."></textarea>
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>💰 Cotización</h3>
+
+<div id="quote"></div>
+
+</div>
+
+<button class="primary" onclick="confirmOrder()">
+🚚 Confirmar solicitud
+</button>
+
+</section>
+
+
+<!-- ORDERS -->
+<section id="ordersView" class="hidden">
+
+<div class="section-title">
+<h2>Mis pedidos</h2>
+<button class="link" onclick="showView('request')">+ Nuevo</button>
+</div>
+
+<div id="orders"></div>
+
+</section>
+
+
+<!-- TRACKING -->
+<section id="trackingView" class="hidden">
+
+<button class="back" id="trackingBackBtn" onclick="showView('orders')">← Mis pedidos</button>
+
+<div id="trackingContent"></div>
+
+</section>
+
+
+<!-- PROFILE -->
+<section id="profileView" class="hidden">
+
+<div class="profile-head">
+
+<div class="avatar" id="avatar"></div>
+
+<h2 id="profileName"></h2>
+
+<p id="profileEmail"></p>
+
+<p id="profilePhone"></p>
+
+</div>
+
+<div id="profileExtra"></div>
+
+<div class="card">
+
+<h3>🏢 Ubalá Express SAS</h3>
+
+<p style="font-size:14px;line-height:1.6;color:#68736d">
+Transporte de carga agrícola para productores,
+comerciantes y familias de la región del Guavio.
+</p>
+
+</div>
+
+<button class="logout" onclick="logout()">🚪 Cerrar sesión</button>
+
+</section>
+
+
+<!-- ================= ADMIN: RESUMEN ================= -->
+<section id="adminResumenView" class="hidden">
+<div id="adminResumenContent"></div>
+</section>
+
+<!-- ================= ADMIN: USUARIOS ================= -->
+<section id="adminUsuariosView" class="hidden">
+<div id="adminUsuariosContent"></div>
+</section>
+
+<!-- ================= ADMIN: SESIONES ================= -->
+<section id="adminSesionesView" class="hidden">
+<div id="adminSesionesContent"></div>
+</section>
+
+<!-- ================= ADMIN: PEDIDOS ================= -->
+<section id="adminPedidosView" class="hidden">
+<div id="adminPedidosContent"></div>
+</section>
+
+<!-- ================= ADMIN: CATÁLOGO ================= -->
+<section id="adminCatalogoView" class="hidden">
+<div id="adminCatalogoContent"></div>
+</section>
+
+</main>
+
+
+<!-- NAV CLIENTE -->
+<nav class="bottom" id="bottomClient">
+
+<button class="nav active" id="navHome" onclick="showView('home')">
+<span class="nav-icon">🏠</span>
+Inicio
+</button>
+
+<button class="nav" id="navCart" onclick="showView('cart')">
+<span class="nav-icon">🛒</span>
+Carrito
+<span id="cartBadge" class="badge hidden">0</span>
+</button>
+
+<button class="nav" id="navOrders" onclick="showView('orders')">
+<span class="nav-icon">📋</span>
+Pedidos
+</button>
+
+<button class="nav" id="navProfile" onclick="showView('profile')">
+<span class="nav-icon">👤</span>
+Perfil
+</button>
+
+</nav>
+
+<!-- NAV ADMIN -->
+<nav class="bottom admin-nav hidden" id="bottomAdmin">
+
+<button class="nav" id="navAdminResumen" onclick="showView('adminResumen')">
+<span class="nav-icon">📊</span>
+Resumen
+</button>
+
+<button class="nav" id="navAdminUsuarios" onclick="showView('adminUsuarios')">
+<span class="nav-icon">👥</span>
+Usuarios
+</button>
+
+<button class="nav" id="navAdminSesiones" onclick="showView('adminSesiones')">
+<span class="nav-icon">🕒</span>
+Sesiones
+</button>
+
+<button class="nav" id="navAdminPedidos" onclick="showView('adminPedidos')">
+<span class="nav-icon">📦</span>
+Pedidos
+</button>
+
+<button class="nav" id="navAdminCatalogo" onclick="showView('adminCatalogo')">
+<span class="nav-icon">🗂</span>
+Catálogo
+</button>
+
+</nav>
+
+</div>
+
+</div>
+<script>
+
+/* ==========================================================
+   UBALÁ EXPRESS SAS — aplicación web en un solo archivo
+   Fusión de: UBALAEXPRESS.HTML (app cliente) + TrochaGuavioApp
+   (panel de administrador, sesiones y catálogo compartido) +
+   el modelo de datos de trocha_guavio_access.sql / .xlsx / .db
+
+   NOTA IMPORTANTE SOBRE LOS DATOS:
+   Esta página es un archivo estático (se puede abrir con doble
+   clic o publicar en GitHub Pages) y no tiene un servidor detrás.
+   Por eso la "base de datos compartida" (usuarios, sesiones,
+   pedidos, catálogo) se guarda en localStorage del NAVEGADOR que
+   la abre. Eso significa que el panel de administrador muestra
+   todo lo que ha pasado en ESE navegador/dispositivo, pero no
+   sincroniza en vivo entre celulares o computadores distintos.
+   Si más adelante quieres ver todo de verdad en un solo lugar
+   (por ejemplo desde varios celulares), se necesita un backend o
+   una base de datos real como la de trocha_guavio_access.sql,
+   que puedes usar en Access para llevar el historial oficial.
+========================================================== */
+
+const ADMIN_EMAIL="admin@trochaguavio.co";
+const ADMIN_PASSWORD="admin2026";
+
+const DEFAULT_PRODUCTS=[
+{id:"p1",name:"Papa criolla",cat:"Tubérculos",municipio:"Junín",vereda:"El Salitre",producer:"Finca Los Sueva",price:2800,unit:"kg",emoji:"🥔",desc:"Papa criolla amarilla de páramo, ideal para ajiaco."},
+{id:"p2",name:"Papa pastusa",cat:"Tubérculos",municipio:"Gachetá",vereda:"Chuscal",producer:"Vereda Chuscal Agro",price:2200,unit:"kg",emoji:"🥔",desc:"Papa pastusa de guarda, cosecha de altura."},
+{id:"p3",name:"Arveja verde en vaina",cat:"Verduras",municipio:"Guasca",vereda:"Santa Rosa",producer:"Asoagro Santa Rosa",price:3200,unit:"kg",emoji:"🫛",desc:"Arveja fresca recién desvainada."},
+{id:"p4",name:"Fríjol cargamanto",cat:"Granos",municipio:"Ubalá",vereda:"Aguaclara",producer:"Cooperativa Aguaclara",price:6500,unit:"kg",emoji:"🫘",desc:"Fríjol cargamanto rojo, secado natural."},
+{id:"p5",name:"Mora de Castilla",cat:"Frutas",municipio:"La Calera",vereda:"El Hato",producer:"Frutales El Hato",price:4200,unit:"kg",emoji:"🍇",desc:"Mora dulce de altura, recolección diaria."},
+{id:"p6",name:"Curuba larga",cat:"Frutas",municipio:"Gama",vereda:"Centro",producer:"Huerta Gama",price:3600,unit:"kg",emoji:"🍈",desc:"Curuba ácida ideal para jugos."},
+{id:"p7",name:"Trucha arcoíris fresca",cat:"Pesca",municipio:"Ubalá",vereda:"Embalse del Guavio",producer:"Truchicultura El Embalse",price:16000,unit:"kg",emoji:"🐟",desc:"Trucha de estanque, pesca del mismo día."},
+{id:"p8",name:"Queso campesino",cat:"Lácteos",municipio:"Guatavita",vereda:"Montecillo",producer:"Lácteos Montecillo",price:14000,unit:"kg",emoji:"🧀",desc:"Queso fresco campesino, cuajada artesanal."},
+{id:"p9",name:"Leche fresca",cat:"Lácteos",municipio:"Junín",vereda:"Sueva",producer:"Hato Sueva",price:1800,unit:"litro",emoji:"🥛",desc:"Leche cruda refrigerada, ordeño diario."},
+{id:"p10",name:"Cebolla cabezona",cat:"Verduras",municipio:"Gachetá",vereda:"Guavio",producer:"Cultivos Guavio",price:2100,unit:"kg",emoji:"🧅",desc:"Cebolla cabezona roja de buen calibre."},
+{id:"p11",name:"Panela",cat:"Otros",municipio:"Medina",vereda:"Susumuco",producer:"Trapiche Susumuco",price:3800,unit:"kg",emoji:"🍯",desc:"Panela en bloque, molienda artesanal."},
+{id:"p12",name:"Aguacate papelillo",cat:"Frutas",municipio:"Fómeque",vereda:"Mundo Nuevo",producer:"Aguacates Mundo Nuevo",price:3400,unit:"kg",emoji:"🥑",desc:"Aguacate papelillo criollo de cáscara fina."},
+{id:"p13",name:"Hortensias",cat:"Otros",municipio:"Guasca",vereda:"Santuario",producer:"Floricultivos Santuario",price:1200,unit:"tallo",emoji:"🌸",desc:"Tallo de hortensia recién cortado."},
+{id:"p14",name:"Maíz mazorca",cat:"Granos",municipio:"Gama",vereda:"Centro",producer:"Huerta Gama",price:1500,unit:"kg",emoji:"🌽",desc:"Maíz capio en mazorca, cosecha fresca."}
+];
+
+const DEFAULT_TRUCKS=[
+{id:"estacas",name:"Camioneta estacas",capacity:1500,km:3200,load:25000,emoji:"🛻",desc:"Ideal para cargas veredales pequeñas."},
+{id:"turbo",name:"Camión turbo",capacity:4000,km:4800,load:45000,emoji:"🚚",desc:"El más usado para cosechas medianas."},
+{id:"sencillo",name:"Camión sencillo",capacity:8000,km:6500,load:70000,emoji:"🚛",desc:"Para acopios grandes de varias fincas."},
+{id:"doble_troque",name:"Doble troque",capacity:17000,km:9500,load:120000,emoji:"🚛",desc:"Máxima capacidad para carga a granel."}
+];
+
+const DEFAULT_DRIVERS=[
+{id:"c1",name:"Hernán Rincón",placa:"GVO-214",telefono:"310 555 0142"},
+{id:"c2",name:"Marleny Suárez",placa:"GVO-887",telefono:"311 555 0398"},
+{id:"c3",name:"Éver Camargo",placa:"GVO-345",telefono:"312 555 0761"},
+{id:"c4",name:"Rosalba Niño",placa:"GVO-102",telefono:"313 555 0524"},
+{id:"c5",name:"Wilson Castañeda",placa:"GVO-670",telefono:"314 555 0983"}
+];
+
+const MUNICIPIOS={
+"Ubalá":130,
+"Gachalá":145,
+"Gachetá":95,
+"Gama":105,
+"Guasca":55,
+"Guatavita":75,
+"Junín":115,
+"La Calera":25,
+"Fómeque":60,
+"Medina":165,
+"Bogotá D.C.":0
+};
+const MUNICIPIO_PRODUCTOR=Object.keys(MUNICIPIOS).filter(m=>m!=="Bogotá D.C.");/* Coordenadas reales (lat/lng) de cada municipio, usadas por el mapa de seguimiento */
+const MUNICIPIO_COORDS={
+"Ubalá":{lat:4.74389,lng:-73.53472},
+"Gachalá":{lat:4.69306,lng:-73.52000},
+"Gachetá":{lat:4.81756,lng:-73.63603},
+"Gama":{lat:4.76278,lng:-73.61083},
+"Guasca":{lat:4.86583,lng:-73.87722},
+"Guatavita":{lat:4.93444,lng:-73.83444},
+"Junín":{lat:4.79028,lng:-73.81361},
+"La Calera":{lat:4.75306,lng:-73.92000},
+"Fómeque":{lat:4.48472,lng:-73.89361},
+"Medina":{lat:4.50917,lng:-73.34944},
+"Bogotá D.C.":{lat:4.71100,lng:-74.07210}
+};
+   
+
+const ESTADOS=[
+{key:"confirmado",label:"Confirmado",corte:0},
+{key:"cargando",label:"Cargando en finca",corte:10},
+{key:"en_ruta",label:"En ruta",corte:35},
+{key:"entregado",label:"Entregado",corte:100}
+];
+function estadoPorProgreso(p){
+let actual=ESTADOS[0];
+for(const e of ESTADOS){ if(p>=e.corte) actual=e; }
+return actual;
+}
+
+
+let user=null;
+let currentSessionId=null;
+let cart=[];
+let PRODUCTS=[];
+let TRUCKS=[];
+let DRIVERS=[];
+let USERS={};
+let SESSIONS=[];
+let PEDIDOS=[];
+
+let authMode="login";
+let selectedCategory="Todos";
+let selectedTruck="turbo";
+let exclusive=false;
+let currentOrder=null;
+let adminCatTab="productos";
+
+
+/* ================= BASE DE DATOS (localStorage) ================= */
+
+function dbGet(key,fallback){
+try{
+const raw=localStorage.getItem(key);
+return raw?JSON.parse(raw):fallback;
+}catch(e){
+return fallback;
+}
+}
+
+function dbSet(key,value){
+localStorage.setItem(key,JSON.stringify(value));
+}
+
+function initDB(){
+
+USERS=dbGet("ue_usuarios",null);
+
+if(!USERS){
+
+USERS={};
+
+USERS[ADMIN_EMAIL]={
+nombre:"Administrador Ubalá Express",
+correo:ADMIN_EMAIL,
+telefono:"300 000 0000",
+password:ADMIN_PASSWORD,
+rol:"administrador",
+fechaInscripcion:"2026-06-01T08:00:00"
+};
+
+dbSet("ue_usuarios",USERS);
+
+}
+
+SESSIONS=dbGet("ue_sesiones",[]);
+PEDIDOS=dbGet("ue_pedidos",[]);
+
+PRODUCTS=dbGet("ue_productos",null);
+if(!PRODUCTS){ PRODUCTS=DEFAULT_PRODUCTS.slice(); dbSet("ue_productos",PRODUCTS); }
+
+TRUCKS=dbGet("ue_camiones",null);
+if(!TRUCKS){ TRUCKS=DEFAULT_TRUCKS.slice(); dbSet("ue_camiones",TRUCKS); }
+
+DRIVERS=dbGet("ue_conductores",null);
+if(!DRIVERS){ DRIVERS=DEFAULT_DRIVERS.slice(); dbSet("ue_conductores",DRIVERS); }
+
+}
+
+function saveUsers(){ dbSet("ue_usuarios",USERS); }
+function saveSessions(){ dbSet("ue_sesiones",SESSIONS); }
+function savePedidos(){ dbSet("ue_pedidos",PEDIDOS); }
+function saveProducts(){ dbSet("ue_productos",PRODUCTS); }
+function saveTrucks(){ dbSet("ue_camiones",TRUCKS); }
+function saveDrivers(){ dbSet("ue_conductores",DRIVERS); }
+
+
+/* ================= CARGA INICIAL ================= */
+
+function load(){
+
+initDB();
+
+const s=dbGet("ue_session",null);
+
+if(s&&s.correo&&USERS[s.correo]){
+
+user=USERS[s.correo];
+currentSessionId=s.sessionId||null;
+
+cart=dbGet("ue_cart_"+user.correo,[]);
+
+openApp();
+
+}else{
+
+document.getElementById("loginScreen").classList.remove("hidden");
+
+}
+
+}
+
+
+/* ================= AUTH ================= */
+
+function toggleAuth(){
+
+authMode=authMode==="login"?"register":"login";
+
+document.getElementById("authTitle").textContent=
+authMode==="login"?"Iniciar sesión":"Crear cuenta";
+
+document.getElementById("registerFields").classList.toggle("hidden",authMode==="login");
+
+document.getElementById("authButton").textContent=
+authMode==="login"?"Entrar a Ubalá Express":"Crear mi cuenta";
+
+document.getElementById("switchText").textContent=
+authMode==="login"?"¿No tienes una cuenta?":"¿Ya tienes una cuenta?";
+
+document.getElementById("switchButton").textContent=
+authMode==="login"?"Crear cuenta":"Iniciar sesión";
+
+hideError();
+
+}
+
+
+function showError(msg){
+
+const el=document.getElementById("authError");
+
+el.textContent=msg;
+el.classList.remove("hidden");
+
+}
+
+
+function hideError(){
+
+document.getElementById("authError").classList.add("hidden");
+
+}
+
+
+function submitAuth(){
+
+hideError();
+
+const email=document.getElementById("email").value.trim().toLowerCase();
+const password=document.getElementById("password").value;
+
+if(!email||!password){
+showError("Completa correo y contraseña.");
+return;
+}
+
+if(password.length<4){
+showError("La contraseña debe tener al menos 4 caracteres.");
+return;
+}
+
+if(authMode==="register"){
+
+const name=document.getElementById("regName").value.trim();
+const phone=document.getElementById("regPhone").value.trim();
+
+if(!name||!phone){
+showError("Completa todos los campos.");
+return;
+}
+
+if(USERS[email]){
+showError("Ya existe una cuenta con ese correo.");
+return;
+}
+
+const nuevoUsuario={
+nombre:name,
+correo:email,
+telefono:phone,
+password:password,
+rol:"cliente",
+fechaInscripcion:new Date().toISOString()
+};
+
+USERS[email]=nuevoUsuario;
+saveUsers();
+
+abrirSesion(email);
+
+user=nuevoUsuario;
+cart=[];
+
+openApp();
+toast("¡Cuenta creada! Bienvenido a Ubalá Express.");
+
+}else{
+
+const cuenta=USERS[email];
+
+if(!cuenta){
+showError("No encontramos una cuenta con ese correo.");
+return;
+}
+
+if(cuenta.password!==password){
+showError("Correo o contraseña incorrectos.");
+return;
+}
+
+abrirSesion(email);
+
+user=cuenta;
+cart=dbGet("ue_cart_"+email,[]);
+
+openApp();
+
+toast("¡Bienvenido, "+user.nombre.split(" ")[0]+"!");
+
+}
+
+}
+
+
+function abrirSesion(correo){
+
+const nuevaSesion={
+id:"S-"+Date.now(),
+correo:correo,
+entrada:new Date().toISOString(),
+salida:null
+};
+
+SESSIONS.unshift(nuevaSesion);
+saveSessions();
+
+currentSessionId=nuevaSesion.id;
+
+dbSet("ue_session",{correo:correo,sessionId:nuevaSesion.id});
+
+}
+
+
+function logout(){
+
+if(currentSessionId){
+
+SESSIONS=SESSIONS.map(s=>s.id===currentSessionId?{...s,salida:new Date().toISOString()}:s);
+saveSessions();
+
+}
+
+if(user){
+dbSet("ue_cart_"+user.correo,cart);
+}
+
+dbSet("ue_session",{correo:null,sessionId:null});
+
+user=null;
+currentSessionId=null;
+cart=[];
+
+document.getElementById("mainScreen").classList.add("hidden");
+document.getElementById("loginScreen").classList.remove("hidden");
+
+document.getElementById("email").value="";
+document.getElementById("password").value="";
+
+}
+
+
+/* ================= APP ================= */
+
+function openApp(){
+
+document.getElementById("loginScreen").classList.add("hidden");
+document.getElementById("mainScreen").classList.remove("hidden");
+
+const isAdmin=user.rol==="administrador";
+
+document.getElementById("bottomClient").classList.toggle("hidden",isAdmin);
+document.getElementById("bottomAdmin").classList.toggle("hidden",!isAdmin);
+
+if(isAdmin){
+
+showView("adminResumen");
+
+}else{
+
+renderCategories();
+renderProducts();
+renderCart();
+renderOrders();
+renderProfile();
+
+showView("home");
+
+}
+
+}
+
+
+function saveUserData(){
+
+if(!user)return;
+
+savePedidos();
+
+dbSet("ue_cart_"+user.correo,cart);
+
+}
+
+
+/* ================= NAVIGATION ================= */
+
+function showView(view){
+
+const views=[
+"homeView","cartView","requestView","ordersView","trackingView","profileView",
+"adminResumenView","adminUsuariosView","adminSesionesView","adminPedidosView","adminCatalogoView"
+];
+
+views.forEach(v=>{
+document.getElementById(v).classList.add("hidden");
+});
+
+const map={
+home:"homeView",
+cart:"cartView",
+request:"requestView",
+orders:"ordersView",
+tracking:"trackingView",
+profile:"profileView",
+adminResumen:"adminResumenView",
+adminUsuarios:"adminUsuariosView",
+adminSesiones:"adminSesionesView",
+adminPedidos:"adminPedidosView",
+adminCatalogo:"adminCatalogoView"
+};
+
+document.getElementById(map[view]).classList.remove("hidden");
+
+const titles={
+home:["Mercado del Guavio","Productos agrícolas de nuestra región"],
+cart:["Tu carga","Productos seleccionados"],
+request:["Solicitar camión","Transportamos tu cosecha"],
+orders:["Mis pedidos","Consulta tus solicitudes"],
+tracking:["Seguimiento","Estado de tu transporte"],
+profile:["Mi perfil","Tu cuenta en Ubalá Express"],
+adminResumen:["Panel del administrador","Visión general de la operación"],
+adminUsuarios:["Usuarios registrados","Todas las cuentas de la plataforma"],
+adminSesiones:["Sesiones e ingresos","Historial de accesos"],
+adminPedidos:["Todos los pedidos","Historial completo de transporte"],
+adminCatalogo:["Catálogo y flota","Productos, camiones y conductores"]
+};
+
+document.getElementById("pageTitle").textContent=titles[view][0];
+document.getElementById("pageSubtitle").textContent=titles[view][1];
+
+document.querySelectorAll(".nav").forEach(n=>n.classList.remove("active"));
+
+if(view==="home")document.getElementById("navHome").classList.add("active");
+if(view==="cart"||view==="request")document.getElementById("navCart").classList.add("active");
+if(view==="orders")document.getElementById("navOrders").classList.add("active");
+if(view==="profile")document.getElementById("navProfile").classList.add("active");
+
+if(view==="adminResumen")document.getElementById("navAdminResumen").classList.add("active");
+if(view==="adminUsuarios")document.getElementById("navAdminUsuarios").classList.add("active");
+if(view==="adminSesiones")document.getElementById("navAdminSesiones").classList.add("active");
+if(view==="adminPedidos"||(view==="tracking"&&user&&user.rol==="administrador"))document.getElementById("navAdminPedidos").classList.add("active");
+if(view==="adminCatalogo")document.getElementById("navAdminCatalogo").classList.add("active");
+
+if(view==="cart")renderCart();
+if(view==="orders")renderOrders();
+if(view==="profile")renderProfile();
+if(view==="request")renderRequest();
+
+if(view==="tracking"){
+document.getElementById("trackingBackBtn").textContent=
+(user&&user.rol==="administrador")?"← Todos los pedidos":"← Mis pedidos";
+document.getElementById("trackingBackBtn").onclick=function(){
+showView(user&&user.rol==="administrador"?"adminPedidos":"orders");
+};
+}
+
+if(view==="adminResumen")renderAdminResumen();
+if(view==="adminUsuarios")renderAdminUsuarios();
+if(view==="adminSesiones")renderAdminSesiones();
+if(view==="adminPedidos")renderAdminPedidos();
+if(view==="adminCatalogo")renderAdminCatalogo();
+
+}
+
+
+/* ================= PRODUCTS ================= */
+
+function renderCategories(){
+
+const cats=["Todos","Tubérculos","Verduras","Frutas","Lácteos","Pesca","Granos","Otros"];
+
+document.getElementById("categories").innerHTML=cats.map(c=>`
+
+<button class="category ${selectedCategory===c?"active":""}" onclick="selectCategory('${c}')">
+${c}
+</button>
+
+`).join("");
+
+}
+
+
+function selectCategory(category){
+
+selectedCategory=category;
+renderCategories();
+renderProducts();
+
+}
+
+
+function renderProducts(){
+
+const search=(document.getElementById("searchInput")?.value||"").toLowerCase();
+
+const list=PRODUCTS.filter(p=>{
+
+const catOk=selectedCategory==="Todos"||p.cat===selectedCategory;
+
+const searchOk=
+p.name.toLowerCase().includes(search)||
+p.municipio.toLowerCase().includes(search)||
+p.producer.toLowerCase().includes(search);
+
+return catOk&&searchOk;
+
+});
+
+document.getElementById("productCount").textContent=list.length+" productos";
+
+if(!list.length){
+
+document.getElementById("products").innerHTML=`
+<div class="empty" style="grid-column:1/-1">
+<div class="empty-icon">🔎</div>
+<p>No encontramos productos.</p>
+</div>`;
+
+return;
+
+}
+
+document.getElementById("products").innerHTML=list.map(p=>`
+
+<div class="product">
+
+<div class="product-emoji">${p.emoji}</div>
+
+<h3>${p.name}</h3>
+
+<div class="producer">
+📍 ${p.vereda?p.vereda+", ":""}${p.municipio} · ${p.producer}
+</div>
+
+<div style="font-size:11px;color:#68736d;margin-bottom:6px">
+${p.desc||""}
+</div>
+
+<div>
+<span class="price">${money(p.price)}</span>
+<span class="unit"> / ${p.unit}</span>
+</div>
+
+<button class="add" onclick="addToCart('${p.id}')">
++ Agregar
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+function addToCart(id){
+
+const found=cart.find(i=>i.id===id);
+
+if(found){
+found.qty++;
+}else{
+cart.push({id:id,qty:1});
+}
+
+saveUserData();
+renderCart();
+updateBadge();
+
+toast("Producto agregado al carrito.");
+
+}
+
+
+/* ================= CART ================= */
+
+function cartItems(){
+
+return cart.map(item=>{
+
+const product=PRODUCTS.find(p=>p.id===item.id);
+
+return product?{...item,product}:null;
+
+}).filter(Boolean);
+
+}
+
+
+function renderCart(){
+
+const items=cartItems();
+
+const container=document.getElementById("cartItems");
+
+if(!items.length){
+
+container.innerHTML=`
+<div class="empty">
+<div class="empty-icon">🛒</div>
+<h3>Tu carrito está vacío</h3>
+<p style="margin:8px 0 18px">Agrega productos agrícolas para solicitar el transporte.</p>
+<button class="primary" onclick="showView('home')">Ver productos</button>
+</div>`;
+
+document.getElementById("cartSummary").innerHTML="";
+updateBadge();
+return;
+
+}
+
+container.innerHTML=items.map(item=>`
+
+<div class="cart-item">
+
+<div class="cart-icon">${item.product.emoji}</div>
+
+<div class="cart-info">
+
+<h3>${item.product.name}</h3>
+
+<p>${item.product.municipio} · ${money(item.product.price)} / ${item.product.unit}</p>
+
+<div class="qty">
+
+<button onclick="changeQty('${item.id}',-1)">−</button>
+
+<strong>${item.qty}</strong>
+
+<button onclick="changeQty('${item.id}',1)">+</button>
+
+</div>
+
+</div>
+
+<div class="cart-price">
+${money(item.product.price*item.qty)}
+</div>
+
+</div>
+
+`).join("");
+
+const total=items.reduce((s,i)=>s+i.product.price*i.qty,0);
+
+const weight=items.reduce((s,i)=>s+i.qty,0);
+
+document.getElementById("cartSummary").innerHTML=`
+
+<div class="summary">
+
+<div class="row">
+<span>Productos</span>
+<strong>${items.length}</strong>
+</div>
+
+<div class="row">
+<span>Cantidad</span>
+<strong>${weight} unidades</strong>
+</div>
+
+<div class="row total">
+<span>Total productos</span>
+<strong>${money(total)}</strong>
+</div>
+
+<button class="primary" style="margin-top:10px" onclick="showView('request')">
+🚚 Solicitar transporte
+</button>
+
+</div>`;
+
+updateBadge();
+
+}
+
+
+function changeQty(id,delta){
+
+const item=cart.find(i=>i.id===id);
+
+if(!item)return;
+
+item.qty+=delta;
+
+if(item.qty<=0){
+cart=cart.filter(i=>i.id!==id);
+}
+
+saveUserData();
+renderCart();
+updateBadge();
+
+}
+
+
+function updateBadge(){
+
+const count=cart.reduce((s,i)=>s+i.qty,0);
+
+const badge=document.getElementById("cartBadge");
+
+badge.textContent=count;
+
+badge.classList.toggle("hidden",count===0);
+
+}
+
+
+/* ================= TRUCK ================= */
+
+function renderRequest(){
+
+document.getElementById("truckOptions").innerHTML=TRUCKS.map(t=>`
+
+<div class="truck-option ${selectedTruck===t.id?"selected":""}" onclick="selectTruck('${t.id}')">
+
+<div class="truck-emoji">${t.emoji}</div>
+
+<div class="truck-info">
+<strong>${t.name}</strong>
+<small>${t.desc}<br>Capacidad: ${t.capacity.toLocaleString("es-CO")} kg</small>
+</div>
+
+<div class="check"></div>
+
+</div>
+
+`).join("");
+
+document.getElementById("exclusiveSwitch").classList.toggle("on",exclusive);
+
+calculateQuote();
+
+}
+
+
+function selectTruck(id){
+
+selectedTruck=id;
+renderRequest();
+
+}
+
+
+function toggleExclusive(){
+
+exclusive=!exclusive;
+renderRequest();
+
+}
+
+
+function distance(origin,destination){
+
+if(origin===destination)return 8;
+
+const a=MUNICIPIOS[origin]??90;
+const b=MUNICIPIOS[destination]??90;
+
+if(origin==="Bogotá D.C.")return b;
+if(destination==="Bogotá D.C.")return a;
+
+return Math.max(20,Math.abs(a-b)+15);
+
+}
+
+
+function calculateQuote(){
+
+const origin=document.getElementById("origin")?.value||"Ubalá";
+const destination=document.getElementById("destination")?.value||"Bogotá D.C.";
+
+const truck=TRUCKS.find(t=>t.id===selectedTruck)||TRUCKS[0];
+
+const km=distance(origin,destination);
+
+const weight=cartItems().reduce((s,i)=>s+i.qty,0)||200;
+
+let price=truck.km*km+truck.load;
+
+if(exclusive)price*=1.7;
+
+price=Math.round(price/500)*500;
+
+const eta=Math.round((km/(exclusive?34:27))*60+(exclusive?25:45));
+
+document.getElementById("quote").innerHTML=`
+
+<div class="row">
+<span>Ruta</span>
+<strong>${origin} → ${destination}</strong>
+</div>
+
+<div class="row">
+<span>Distancia estimada</span>
+<strong>${km} km</strong>
+</div>
+
+<div class="row">
+<span>Camión</span>
+<strong>${truck.name}</strong>
+</div>
+
+<div class="row">
+<span>Peso estimado</span>
+<strong>${weight} kg</strong>
+</div>
+
+<div class="row">
+<span>Tiempo estimado</span>
+<strong>${eta} min</strong>
+</div>
+
+<div class="row total">
+<span>Transporte</span>
+<strong>${money(price)}</strong>
+</div>
+
+`;
+
+return {truck,km,weight,price,eta,origin,destination};
+
+}
+
+
+/* ================= ORDERS ================= */
+
+function confirmOrder(){
+
+if(!user){
+toast("Debes iniciar sesión.");
+return;
+}
+
+const quote=calculateQuote();
+
+const notes=document.getElementById("notes").value;
+
+const id="UE-"+Date.now().toString().slice(-8);
+
+const driver=DRIVERS[Math.floor(Math.random()*DRIVERS.length)];
+
+const items=cartItems().length
+?cartItems().map(i=>({nombre:i.product.name,cantidad:i.qty,unidad:i.product.unit}))
+:[{nombre:notes||"Carga general del productor",cantidad:1,unidad:"carga"}];
+
+const order={
+id:id,
+correoCliente:user.correo,
+nombreCliente:user.nombre,
+origin:quote.origin,
+destination:quote.destination,
+truck:quote.truck.name,
+truckId:quote.truck.id,
+km:quote.km,
+weight:quote.weight,
+price:quote.price,
+eta:quote.eta,
+exclusive:exclusive,
+notes:notes,
+items:items,
+progress:0,
+estado:"confirmado",
+status:"Confirmado",
+created:new Date().toLocaleString("es-CO"),
+creadoISO:new Date().toISOString(),
+driver:{
+name:driver.name,
+plate:driver.placa,
+phone:driver.telefono
+}
+};
+
+PEDIDOS.unshift(order);
+
+cart=[];
+
+saveUserData();
+
+currentOrder=id;
+
+showTracking(id);
+
+toast("¡Solicitud confirmada! 🚚");
+
+}
+
+
+function renderOrders(){
+
+const container=document.getElementById("orders");
+
+const misPedidos=PEDIDOS.filter(o=>o.correoCliente===user.correo);
+
+if(!misPedidos.length){
+
+container.innerHTML=`
+<div class="empty">
+<div class="empty-icon">📋</div>
+<h3>Aún no tienes pedidos</h3>
+<p style="margin-top:7px">Tus solicitudes de transporte aparecerán aquí.</p>
+</div>`;
+
+return;
+
+}
+
+container.innerHTML=misPedidos.map(o=>`
+
+<div class="order">
+
+<div class="order-top">
+
+<span class="order-id">${o.id}</span>
+
+<span class="status">${o.status}</span>
+
+</div>
+
+<div class="order-route">
+
+<span>${o.origin}</span>
+
+<span class="order-arrow">→</span>
+
+<span>${o.destination}</span>
+
+</div>
+
+<div class="order-bottom">
+
+<span>${o.truck}</span>
+
+<strong style="color:#1F4D36">${money(o.price)}</strong>
+
+</div>
+
+<button class="secondary" style="width:100%;margin-top:12px" onclick="showTracking('${o.id}')">
+Ver seguimiento
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* ================= TRACKING ================= */
+
+function showTracking(id){
+
+currentOrder=id;
+
+const order=PEDIDOS.find(o=>o.id===id);
+
+if(!order)return;
+
+showView("tracking");
+
+renderTracking();
+
+}
+
+
+function renderTracking(){
+
+const order=PEDIDOS.find(o=>o.id===currentOrder);
+
+if(!order)return;
+
+const p=order.progress||0;
+
+const estadoInfo=estadoPorProgreso(p);
+
+order.status=estadoInfo.label;
+order.estado=estadoInfo.key;
+
+const driver=order.driver;
+
+document.getElementById("trackingContent").innerHTML=`
+
+<div class="card">
+
+<div style="display:flex;justify-content:space-between;align-items:center">
+
+<div>
+<strong>${order.id}</strong>
+<p style="font-size:12px;color:#68736d;margin-top:4px">${order.created}</p>
+${user.rol==="administrador"?`<p style="font-size:12px;color:#68736d;margin-top:2px">Cliente: ${order.nombreCliente} (${order.correoCliente})</p>`:""}
+</div>
+
+<span class="status">${order.status}</span>
+
+</div>
+
+</div>
+
+
+<div class="tracking-map">
+<div id="trackingMapCanvas" style="width:100%;height:100%"></div>
+</div>
+
+
+<div class="card">
+
+<div class="row">
+<span>Origen</span>
+<strong>${order.origin}</strong>
+</div>
+
+<div class="row">
+<span>Destino</span>
+<strong>${order.destination}</strong>
+</div>
+
+<div class="row">
+<span>Camión</span>
+<strong>${order.truck}</strong>
+</div>
+
+<div class="row">
+<span>Distancia</span>
+<strong>${order.km} km</strong>
+</div>
+
+<div class="progress-wrap">
+
+<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px">
+<span>Progreso</span>
+<strong>${Math.min(p,100)}%</strong>
+</div>
+
+<div class="progress">
+<div class="progress-bar" style="width:${Math.min(p,100)}%"></div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📍 Estado del viaje</h3>
+
+<div class="timeline">
+
+<div class="timeline-item done">
+<div class="timeline-dot"></div>
+<div>
+<strong>Solicitud confirmada</strong>
+<p>Ubalá Express recibió tu solicitud.</p>
+</div>
+</div>
+
+<div class="timeline-item ${p>=10?"done":""}">
+<div class="timeline-dot"></div>
+<div>
+<strong>Cargando en finca</strong>
+<p>El conductor recoge tu carga.</p>
+</div>
+</div>
+
+<div class="timeline-item ${p>=35?"done":""}">
+<div class="timeline-dot"></div>
+<div>
+<strong>En ruta</strong>
+<p>Tu carga está viajando hacia ${order.destination}.</p>
+</div>
+</div>
+
+<div class="timeline-item ${p>=100?"done":""}">
+<div class="timeline-dot"></div>
+<div>
+<strong>Entregado</strong>
+<p>La carga llegó a su destino.</p>
+</div>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>👨‍✈️ Conductor asignado</h3>
+
+<div style="display:flex;gap:12px;align-items:center">
+
+<div class="avatar" style="width:55px;height:55px;font-size:22px;margin:0">👨‍✈️</div>
+
+<div>
+<strong>${driver.name}</strong>
+<p style="font-size:13px;color:#68736d;margin-top:3px">
+Placa ${driver.plate}
+</p>
+<p style="font-size:13px;color:#68736d">
+📞 ${driver.phone}
+</p>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>📦 Carga transportada</h3>
+
+${(order.items||[]).map(it=>`
+<div class="row">
+<span>${it.nombre}</span>
+<strong>${it.cantidad} ${it.unidad}</strong>
+</div>
+`).join("")}
+
+</div>
+
+
+${p<100?`
+
+<button class="primary" onclick="advanceOrder()">
+🔄 Actualizar seguimiento
+</button>
+
+`:`
+
+<div style="background:#e5f0e7;color:#1F4D36;padding:15px;border-radius:13px;text-align:center;font-weight:bold">
+✅ ¡Carga entregada exitosamente!
+</div>
+
+`}
+
+`;
+   
+initTrackingMap(order);
+
+saveUserData();
+
+}
+
+/* ================= MAPA REAL (GOOGLE MAPS) ================= */
+
+let googleMapsReady=false;
+let trackingMap=null;
+let trackingTruckMarker=null;
+let trackingRoutePath=null;
+
+/* Esta función la invoca automáticamente el script de Google al terminar de cargar */
+function initGoogleMapsAPI(){
+googleMapsReady=true;
+const order=PEDIDOS.find(o=>o.id===currentOrder);
+if(order && !document.getElementById("trackingView").classList.contains("hidden")){
+initTrackingMap(order);
+}
+}
+
+function initTrackingMap(order){
+const canvas=document.getElementById("trackingMapCanvas");
+if(!canvas)return;
+
+if(!googleMapsReady||typeof google==="undefined"||!google.maps){
+canvas.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#68736d;font-size:13px">Cargando mapa…</div>';
+setTimeout(function(){
+if(document.getElementById("trackingMapCanvas"))initTrackingMap(order);
+},700);
+return;
+}
+
+const origin=MUNICIPIO_COORDS[order.origin]||MUNICIPIO_COORDS["Bogotá D.C."];
+const destination=MUNICIPIO_COORDS[order.destination]||MUNICIPIO_COORDS["Bogotá D.C."];
+
+trackingMap=new google.maps.Map(canvas,{
+center:origin,
+zoom:10,
+disableDefaultUI:true,
+zoomControl:true,
+gestureHandling:"greedy"
+});
+
+const bounds=new google.maps.LatLngBounds();
+bounds.extend(origin);
+bounds.extend(destination);
+trackingMap.fitBounds(bounds,40);
+
+new google.maps.Marker({position:origin,map:trackingMap,label:{text:"📍",fontSize:"22px"},title:"Origen: "+order.origin});
+new google.maps.Marker({position:destination,map:trackingMap,label:{text:"🏁",fontSize:"22px"},title:"Destino: "+order.destination});
+
+trackingTruckMarker=null;
+
+trackingRoutePath=[
+new google.maps.LatLng(origin.lat,origin.lng),
+new google.maps.LatLng(destination.lat,destination.lng)
+];
+
+new google.maps.Polyline({
+path:trackingRoutePath,
+map:trackingMap,
+strokeColor:"#1F4D36",
+strokeWeight:4,
+strokeOpacity:0.85
+});
+
+placeTruckOnPath(order.progress||0);
+}
+
+/* Calcula dónde va el camión según el % de avance.
+El día que tengas GPS real, solo cambia el cuerpo de esta función
+para que devuelva la posición que llegue del backend. */
+function placeTruckOnPath(progressPercent){
+if(!trackingRoutePath||!trackingMap)return;
+
+const fraction=Math.max(0,Math.min(progressPercent,100))/100;
+const point=pointAtFraction(trackingRoutePath,fraction);
+
+if(trackingTruckMarker){
+trackingTruckMarker.setPosition(point);
+}else{
+trackingTruckMarker=new google.maps.Marker({position:point,map:trackingMap,label:{text:"🚚",fontSize:"24px"},zIndex:999});
+}
+}
+
+function pointAtFraction(path,fraction){
+if(path.length===1)return path[0];
+
+let totalDistance=0;
+const segmentDistances=path.slice(0,-1).map(function(p,i){
+const d=google.maps.geometry.spherical.computeDistanceBetween(p,path[i+1]);
+totalDistance+=d;
+return d;
+});
+
+let targetDistance=totalDistance*fraction;
+
+for(let i=0;i<segmentDistances.length;i++){
+if(targetDistance<=segmentDistances[i]){
+const segmentFraction=segmentDistances[i]===0?0:targetDistance/segmentDistances[i];
+return google.maps.geometry.spherical.interpolate(path[i],path[i+1],segmentFraction);
+}
+targetDistance-=segmentDistances[i];
+}
+
+return path[path.length-1];
+}
+
+/* SIMULACIÓN DEL AVANCE */
+
+function advanceOrder(){
+
+const order=PEDIDOS.find(o=>o.id===currentOrder);
+
+if(!order)return;
+
+if(order.progress<10)order.progress=10;
+else if(order.progress<35)order.progress=35;
+else if(order.progress<70)order.progress=70;
+else order.progress=100;
+
+saveUserData();
+
+renderTracking();
+
+if(user.rol==="administrador"){
+renderAdminPedidos();
+renderAdminResumen();
+}else{
+renderOrders();
+}
+
+toast(
+order.progress>=100
+?"¡Pedido entregado! 🎉"
+:"Seguimiento actualizado 🚚"
+);
+
+}
+
+
+/* ================= PROFILE ================= */
+
+function renderProfile(){
+
+if(!user)return;
+
+const initials=user.nombre
+.split(" ")
+.map(x=>x[0])
+.slice(0,2)
+.join("")
+.toUpperCase();
+
+document.getElementById("avatar").textContent=initials;
+document.getElementById("profileName").textContent=user.nombre;
+document.getElementById("profileEmail").textContent="✉️ "+user.correo;
+document.getElementById("profilePhone").textContent="📞 "+(user.telefono||"—");
+
+const isAdmin=user.rol==="administrador";
+
+const misPedidos=PEDIDOS.filter(o=>o.correoCliente===user.correo);
+const entregados=misPedidos.filter(o=>o.estado==="entregado").length;
+
+document.getElementById("profileExtra").innerHTML=`
+
+<div class="card">
+
+<h3>📊 Resumen</h3>
+
+<div class="profile-stat">
+
+<div class="stat">
+<strong>${isAdmin?"⚙️":misPedidos.length}</strong>
+<span>${isAdmin?"Administrador":"Pedidos"}</span>
+</div>
+
+<div class="stat">
+<strong>${isAdmin?"🚚":entregados}</strong>
+<span>${isAdmin?"Servicio agrícola":"Entregas completadas"}</span>
+</div>
+
+</div>
+
+</div>
+
+${isAdmin?`
+<button class="secondary" style="width:100%;margin-bottom:14px" onclick="showView('adminResumen')">
+📊 Ir al panel de administrador
+</button>
+`:""}
+
+`;
+
+}
+
+
+/* ================= PANEL DE ADMINISTRADOR ================= */
+
+function renderAdminResumen(){
+
+const totalUsuarios=Object.keys(USERS).length;
+const totalPedidos=PEDIDOS.length;
+const sesionesAbiertas=SESSIONS.filter(s=>!s.salida).length;
+
+const porProducto={};
+PEDIDOS.forEach(p=>(p.items||[]).forEach(it=>{
+porProducto[it.nombre]=(porProducto[it.nombre]||0)+Number(it.cantidad||0);
+}));
+const rankingProductos=Object.entries(porProducto).sort((a,b)=>b[1]-a[1]).slice(0,5);
+
+const porCamion={};
+PEDIDOS.forEach(p=>{ porCamion[p.truck]=(porCamion[p.truck]||0)+1; });
+const rankingCamiones=Object.entries(porCamion).sort((a,b)=>b[1]-a[1]);
+
+document.getElementById("adminResumenContent").innerHTML=`
+
+<div class="data-note">
+📌 Estos datos se guardan en este navegador. Corresponden al mismo modelo de
+trocha_guavio_access.sql (Usuarios, Sesiones, Pedidos, PedidoItems).
+</div>
+
+<div class="stat-grid">
+<div class="stat-card"><span>👥 Usuarios registrados</span><strong>${totalUsuarios}</strong></div>
+<div class="stat-card"><span>📦 Pedidos totales</span><strong>${totalPedidos}</strong></div>
+<div class="stat-card"><span>🕒 Inicios de sesión</span><strong>${SESSIONS.length}</strong></div>
+<div class="stat-card"><span>🟢 Sesiones activas</span><strong>${sesionesAbiertas}</strong></div>
+</div>
+
+<div class="section-title"><h2 style="font-size:15px">🌿 Producto más transportado</h2></div>
+<div class="rank-list">
+${rankingProductos.length?rankingProductos.map(([nombre,qty])=>`
+<div class="rank-row"><span>${nombre}</span><strong>${qty.toLocaleString("es-CO")}</strong></div>
+`).join(""):'<p class="empty" style="padding:16px">Aún no hay pedidos.</p>'}
+</div>
+
+<div class="section-title"><h2 style="font-size:15px">🚚 Pedidos por tipo de camión</h2></div>
+<div class="rank-list">
+${rankingCamiones.length?rankingCamiones.map(([nombre,n])=>`
+<div class="rank-row"><span>${nombre}</span><strong>${n}</strong></div>
+`).join(""):'<p class="empty" style="padding:16px">Aún no hay pedidos.</p>'}
+</div>
+
+`;
+
+}
+
+
+function renderAdminUsuarios(){
+
+const lista=Object.values(USERS).sort((a,b)=>new Date(b.fechaInscripcion)-new Date(a.fechaInscripcion));
+
+document.getElementById("adminUsuariosContent").innerHTML=`
+
+<div class="section-title"><h2 style="font-size:15px">👥 ${lista.length} usuarios</h2></div>
+
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead><tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Inscripción</th><th>Rol</th><th>Sesiones</th><th>Pedidos</th><th></th></tr></thead>
+<tbody>
+${lista.map(u=>{
+const nSesiones=SESSIONS.filter(s=>s.correo===u.correo).length;
+const nPedidos=PEDIDOS.filter(p=>p.correoCliente===u.correo).length;
+return `
+<tr>
+<td>${u.nombre}</td>
+<td>${u.correo}</td>
+<td>${u.telefono||"—"}</td>
+<td>${fechaCorta(u.fechaInscripcion)}</td>
+<td><span class="role-badge role-${u.rol}">${u.rol}</span></td>
+<td>${nSesiones}</td>
+<td>${nPedidos}</td>
+<td>${u.rol!=="administrador"?`<button class="icon-danger" onclick="adminDeleteUser('${u.correo}')">🗑</button>`:""}</td>
+</tr>
+`;
+}).join("")}
+</tbody>
+</table>
+</div>
+
+`;
+
+}
+
+
+function adminDeleteUser(correo){
+
+if(!confirm("¿Eliminar la cuenta "+correo+"? Esta acción no se puede deshacer."))return;
+
+delete USERS[correo];
+saveUsers();
+
+renderAdminUsuarios();
+renderAdminResumen();
+
+toast("Usuario eliminado.");
+
+}
+
+
+function renderAdminSesiones(){
+
+const lista=[...SESSIONS].sort((a,b)=>new Date(b.entrada)-new Date(a.entrada));
+
+document.getElementById("adminSesionesContent").innerHTML=`
+
+<div class="section-title"><h2 style="font-size:15px">🕒 ${lista.length} registros de acceso</h2></div>
+
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead><tr><th>Usuario</th><th>Correo</th><th>Entrada</th><th>Salida</th></tr></thead>
+<tbody>
+${lista.map(s=>`
+<tr>
+<td>${USERS[s.correo]?.nombre||"—"}</td>
+<td>${s.correo}</td>
+<td>${fechaCorta(s.entrada)}</td>
+<td>${s.salida?fechaCorta(s.salida):'<span class="badge-open">Activa</span>'}</td>
+</tr>
+`).join("")}
+</tbody>
+</table>
+</div>
+
+`;
+
+}
+
+
+function renderAdminPedidos(){
+
+const lista=[...PEDIDOS].sort((a,b)=>new Date(b.creadoISO)-new Date(a.creadoISO));
+
+document.getElementById("adminPedidosContent").innerHTML=`
+
+<div class="section-title"><h2 style="font-size:15px">📦 ${lista.length} pedidos</h2></div>
+
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead><tr><th>ID</th><th>Cliente</th><th>Ruta</th><th>Camión</th><th>Modalidad</th><th>Carga</th><th>Precio</th><th>Estado</th><th></th></tr></thead>
+<tbody>
+${lista.map(p=>`
+<tr>
+<td style="font-family:monospace">${p.id}</td>
+<td>${p.nombreCliente}<br><span style="font-size:10px;color:#8a8878">${p.correoCliente}</span></td>
+<td>${p.origin} → ${p.destination}</td>
+<td>${p.truck}</td>
+<td>${p.exclusive?"Exclusivo":"General"}</td>
+<td>${(p.items||[]).map(it=>`${it.nombre} x${it.cantidad}${it.unidad}`).join(", ")}</td>
+<td>${money(p.price)}</td>
+<td>
+<select class="select-sm" onchange="adminSetEstado('${p.id}',this.value)">
+${ESTADOS.map(e=>`<option value="${e.key}" ${p.estado===e.key?"selected":""}>${e.label}</option>`).join("")}
+</select>
+</td>
+<td>
+<button class="icon-btn-sm" onclick="showTracking('${p.id}')">👁</button>
+<button class="icon-danger" onclick="adminDeleteOrder('${p.id}')">🗑</button>
+</td>
+</tr>
+`).join("")}
+</tbody>
+</table>
+</div>
+
+`;
+
+}
+
+
+function adminSetEstado(id,estadoKey){
+
+const order=PEDIDOS.find(o=>o.id===id);
+
+if(!order)return;
+
+const info=ESTADOS.find(e=>e.key===estadoKey);
+
+order.estado=estadoKey;
+order.status=info.label;
+order.progress=info.corte;
+
+savePedidos();
+
+renderAdminPedidos();
+renderAdminResumen();
+
+toast("Estado del pedido actualizado.");
+
+}
+
+
+function adminDeleteOrder(id){
+
+if(!confirm("¿Eliminar el pedido "+id+"?"))return;
+
+PEDIDOS=PEDIDOS.filter(o=>o.id!==id);
+savePedidos();
+
+renderAdminPedidos();
+renderAdminResumen();
+
+toast("Pedido eliminado.");
+
+}
+
+
+function setAdminCatTab(tab){
+
+adminCatTab=tab;
+renderAdminCatalogo();
+
+}
+
+
+function renderAdminCatalogo(){
+
+let inner="";
+
+if(adminCatTab==="productos"){
+
+inner=`
+
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead><tr><th>Producto</th><th>Municipio</th><th>Precio</th><th>Unidad</th><th></th></tr></thead>
+<tbody>
+${PRODUCTS.map(p=>`
+<tr>
+<td>${p.emoji} ${p.name}</td>
+<td>${p.municipio}</td>
+<td><input class="td-input" type="number" value="${p.price}" onchange="adminUpdateProduct('${p.id}','price',this.value)"></td>
+<td>${p.unit}</td>
+<td><button class="icon-danger" onclick="adminDeleteProduct('${p.id}')">🗑</button></td>
+</tr>
+`).join("")}
+</tbody>
+</table>
+<div class="add-row">
+<input id="newProdName" placeholder="Nombre del producto">
+<select id="newProdMuni">${MUNICIPIO_PRODUCTOR.map(m=>`<option value="${m}">${m}</option>`).join("")}</select>
+<input id="newProdPrice" type="number" placeholder="Precio">
+<button class="primary add-btn-wide" onclick="adminAddProduct()">+ Agregar producto</button>
+</div>
+</div>
+
+`;
+
+}
+
+if(adminCatTab==="camiones"){
+
+inner=`
+
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead><tr><th>Camión</th><th>Capacidad kg</th><th>Tarifa/km</th><th>Cargue fijo</th></tr></thead>
+<tbody>
+${TRUCKS.map(t=>`
+<tr>
+<td>${t.emoji} ${t.name}</td>
+<td><input class="td-input" type="number" value="${t.capacity}" onchange="adminUpdateTruck('${t.id}','capacity',this.value)"></td>
+<td><input class="td-input" type="number" value="${t.km}" onchange="adminUpdateTruck('${t.id}','km',this.value)"></td>
+<td><input class="td-input" type="number" value="${t.load}" onchange="adminUpdateTruck('${t.id}','load',this.value)"></td>
+</tr>
+`).join("")}
+</tbody>
+</table>
+</div>
+
+`;
+
+}
+
+if(adminCatTab==="conductores"){
+
+inner=`
+
+<div class="admin-table-wrap">
+<table class="admin-table">
+<thead><tr><th>Nombre</th><th>Placa</th><th>Teléfono</th><th></th></tr></thead>
+<tbody>
+${DRIVERS.map(d=>`
+<tr>
+<td><input class="td-input" style="width:120px" value="${d.name}" onchange="adminUpdateDriver('${d.id}','name',this.value)"></td>
+<td><input class="td-input" value="${d.placa}" onchange="adminUpdateDriver('${d.id}','placa',this.value)"></td>
+<td><input class="td-input" style="width:110px" value="${d.telefono}" onchange="adminUpdateDriver('${d.id}','telefono',this.value)"></td>
+<td><button class="icon-danger" onclick="adminDeleteDriver('${d.id}')">🗑</button></td>
+</tr>
+`).join("")}
+</tbody>
+</table>
+<div class="add-row">
+<input id="newDrvName" placeholder="Nombre">
+<input id="newDrvPlaca" placeholder="Placa">
+<input id="newDrvTel" placeholder="Teléfono">
+<button class="primary add-btn-wide" onclick="adminAddDriver()">+ Agregar conductor</button>
+</div>
+</div>
+
+`;
+
+}
+
+document.getElementById("adminCatalogoContent").innerHTML=`
+
+<div class="admin-tabs">
+<button class="${adminCatTab==="productos"?"active":""}" onclick="setAdminCatTab('productos')">Productos</button>
+<button class="${adminCatTab==="camiones"?"active":""}" onclick="setAdminCatTab('camiones')">Camiones</button>
+<button class="${adminCatTab==="conductores"?"active":""}" onclick="setAdminCatTab('conductores')">Conductores</button>
+</div>
+
+${inner}
+
+`;
+
+}
+
+
+function adminUpdateProduct(id,field,value){
+
+PRODUCTS=PRODUCTS.map(p=>p.id===id?{...p,[field]:field==="price"?Number(value):value}:p);
+saveProducts();
+renderAdminResumen();
+
+}
+
+
+function adminDeleteProduct(id){
+
+if(!confirm("¿Eliminar este producto del catálogo?"))return;
+
+PRODUCTS=PRODUCTS.filter(p=>p.id!==id);
+saveProducts();
+
+renderAdminCatalogo();
+
+}
+
+
+function adminAddProduct(){
+
+const nombre=document.getElementById("newProdName").value.trim();
+const municipio=document.getElementById("newProdMuni").value;
+const precio=Number(document.getElementById("newProdPrice").value);
+
+if(!nombre||!precio){
+toast("Completa nombre y precio del producto.");
+return;
+}
+
+const id="p"+Date.now().toString().slice(-6);
+
+PRODUCTS.push({
+id:id,
+name:nombre,
+cat:"Otros",
+municipio:municipio,
+vereda:"",
+producer:"Productor registrado",
+price:precio,
+unit:"kg",
+emoji:"🌱",
+desc:""
+});
+
+saveProducts();
+
+document.getElementById("newProdName").value="";
+document.getElementById("newProdPrice").value="";
+
+renderAdminCatalogo();
+
+toast("Producto agregado al catálogo.");
+
+}
+
+
+function adminUpdateTruck(id,field,value){
+
+TRUCKS=TRUCKS.map(t=>t.id===id?{...t,[field]:Number(value)}:t);
+saveTrucks();
+
+}
+
+
+function adminUpdateDriver(id,field,value){
+
+DRIVERS=DRIVERS.map(d=>d.id===id?{...d,[field]:value}:d);
+saveDrivers();
+
+}
+
+
+function adminDeleteDriver(id){
+
+if(!confirm("¿Eliminar este conductor?"))return;
+
+DRIVERS=DRIVERS.filter(d=>d.id!==id);
+saveDrivers();
+
+renderAdminCatalogo();
+
+}
+
+
+function adminAddDriver(){
+
+const nombre=document.getElementById("newDrvName").value.trim();
+const placa=document.getElementById("newDrvPlaca").value.trim();
+const telefono=document.getElementById("newDrvTel").value.trim();
+
+if(!nombre||!placa){
+toast("Completa nombre y placa del conductor.");
+return;
+}
+
+DRIVERS.push({
+id:"c"+Date.now().toString().slice(-6),
+name:nombre,
+placa:placa,
+telefono:telefono||"—"
+});
+
+saveDrivers();
+
+document.getElementById("newDrvName").value="";
+document.getElementById("newDrvPlaca").value="";
+document.getElementById("newDrvTel").value="";
+
+renderAdminCatalogo();
+
+toast("Conductor agregado.");
+
+}
+
+
+/* ================= UTILIDADES ================= */
+
+function money(number){
+
+return new Intl.NumberFormat("es-CO",{
+style:"currency",
+currency:"COP",
+maximumFractionDigits:0
+}).format(number);
+
+}
+
+
+function fechaCorta(iso){
+
+if(!iso)return "—";
+
+const d=new Date(iso);
+
+return d.toLocaleString("es-CO",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"});
+
+}
+
+
+/* ================= TOAST ================= */
+
+let toastTimer;
+
+function toast(message){
+
+const old=document.querySelector(".toast");
+
+if(old)old.remove();
+
+const el=document.createElement("div");
+
+el.className="toast";
+el.textContent=message;
+
+document.body.appendChild(el);
+
+clearTimeout(toastTimer);
+
+toastTimer=setTimeout(()=>{
+el.remove();
+},2800);
+
+}
+
+
+/* ================= EVENTS ================= */
+
+document.addEventListener("change",function(e){
+
+if(e.target.id==="origin"||e.target.id==="destination"){
+calculateQuote();
+}
+
+});
+
+
+/* ================= START ================= */
+
+load();
+
+</script>
+
+<!--
+  Reemplaza TU_API_KEY_AQUI por tu clave real de Google Maps.
+  La clave necesita habilitada: "Maps JavaScript API".
+-->
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB80iEhKOKg_6bDon35vaRHs66evqwgSUI&libraries=geometry&callback=initGoogleMapsAPI">
+
+
+</script>
+</body>
+</html>
