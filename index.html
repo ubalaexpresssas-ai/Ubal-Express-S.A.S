@@ -1651,7 +1651,7 @@ document.getElementById("products").innerHTML=list.map(p=>`
 
 <div class="product">
 
-<div class="product-emoji">${p.emoji}</div>
+<div class="product-emoji">${p.img?`<img src="${p.img}" alt="${p.name}" onerror="this.parentElement.textContent='${p.emoji}'">`:p.emoji}</div>
 
 <h3>${p.name}</h3>
 
